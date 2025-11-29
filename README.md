@@ -15,7 +15,7 @@ SentiScope is a production-ready sentiment analysis tool built to demonstrate ex
 Two specialized modes serve different use cases. Personal Journal mode enables users to track their emotional journey through daily entries with sentiment analysis and trend visualization. Batch Analyzer mode processes multiple texts simultaneously, perfect for analyzing customer reviews, social media posts, or survey responses at scale.
 
 ### 2. Deep Learning NLP
-Powered by DistilBERT from Hugging Face Transformers library. The model provides state-of-the-art sentiment classification with confidence scores. Processes text in real-time with GPU acceleration when available. Pre-trained on massive datasets ensuring high accuracy across different text types and domains.
+Powered by Twitter-RoBERTa from Hugging Face Transformers library. The model provides state-of-the-art sentiment classification with three classes: positive, neutral, and negative sentiments with confidence scores. Processes text in real-time with GPU acceleration when available. Pre-trained on massive Twitter datasets ensuring high accuracy across different text types and social media content.
 
 ### 3. Personal Sentiment Journal
 Users can write daily journal entries with automatic sentiment detection and confidence scoring. The system tracks emotional patterns over time with interactive timeline visualizations. Sentiment distribution analytics show overall emotional trends. Recent entries are displayed with expandable details for easy review. Complete journal export functionality preserves all entries in JSON format.
@@ -35,7 +35,7 @@ Personal journal entries export as structured JSON with timestamps, text, sentim
 Built with Python 3.11+ as the primary language. Streamlit 1.31 provides the modern reactive web framework. Hugging Face Transformers 4.36 enables Deep Learning NLP capabilities. PyTorch 2.1 serves as the Deep Learning backend with GPU support. Pandas 2.1 handles data manipulation and analysis. Plotly 5.18 creates interactive data visualizations.
 
 ### AI/ML Layer
-DistilBERT base uncased model fine-tuned on SST-2 sentiment dataset provides the core classification. Pipeline API from Transformers simplifies model loading and inference. Automatic model caching optimizes performance on repeated analyses. Confidence scoring quantifies prediction certainty for each classification.
+Twitter-RoBERTa base model fine-tuned on TweetEval sentiment dataset provides the core three-class classification. Pipeline API from Transformers simplifies model loading and inference. Automatic model caching optimizes performance on repeated analyses. Confidence scoring quantifies prediction certainty for each classification across positive, neutral, and negative categories.
 
 ### Architecture
 Component-based design separates concerns between journal and batch modes. Session state management persists user data across interactions. Cached model loading with @st.cache_resource prevents redundant model initialization. Responsive UI adapts to different screen sizes and devices. Modular code structure enables easy feature additions and maintenance.
@@ -54,10 +54,10 @@ Immediate feedback through real-time sentiment analysis and progress indicators.
 ## Technical Highlights
 
 ### Deep Learning Implementation
-DistilBERT model provides 97% of BERT's accuracy with 40% less parameters and 60% faster inference. Transformer architecture with attention mechanisms captures context and nuance in text. Transfer learning leverages pre-training on massive corpora for superior performance. Automatic tokenization handles text preprocessing and encoding. Confidence scores from softmax probabilities quantify prediction certainty.
+Twitter-RoBERTa model provides state-of-the-art sentiment analysis trained specifically on social media text. Transformer architecture with attention mechanisms captures context and nuance in text including informal language and emojis. Transfer learning leverages pre-training on 58 million tweets for superior performance on real-world content. Automatic tokenization handles text preprocessing and encoding. Three-class output enables detection of positive, neutral, and negative sentiments. Confidence scores from softmax probabilities quantify prediction certainty.
 
 ### Sentiment Analysis Pipeline
-Text preprocessing includes truncation to 512 tokens for model compatibility. Tokenization converts text to model-compatible input tensors. Forward pass through transformer layers extracts contextual representations. Classification head produces sentiment logits for positive and negative classes. Softmax normalization converts logits to interpretable probability scores.
+Text preprocessing includes truncation to 512 tokens for model compatibility. Tokenization converts text to model-compatible input tensors using RoBERTa tokenizer. Forward pass through transformer layers extracts contextual representations. Classification head produces sentiment logits for positive, neutral, and negative classes. Softmax normalization converts logits to interpretable probability scores across all three categories.
 
 ### Data Management
 Session state stores journal entries and batch results within user sessions. Pandas DataFrames enable efficient data manipulation and analysis. Timestamp tracking records entry creation for temporal analysis. JSON serialization preserves complex data structures for export. CSV generation provides spreadsheet-compatible output format.
@@ -105,14 +105,6 @@ This project demonstrates ability to integrate state-of-the-art Deep Learning mo
 
 Perfect for roles in: Machine Learning Engineering, NLP Engineering, Data Science, Full-Stack Development with AI focus, and Product Development for AI applications.
 
-## Running Locally
-
-The application requires Python 3.11+ and pip for dependency management. Dependencies install via pip install -r requirements.txt with first run downloading the DistilBERT model automatically from Hugging Face Hub. The application runs through streamlit run app.py and becomes accessible at localhost:8501. Internet connection required only for initial model download then works offline.
-
-## Deployment
-
-The application deploys seamlessly to Streamlit Cloud with one-click deployment. Simply connect GitHub repository, select main branch, specify app.py as entry point, and Streamlit Cloud handles dependencies and model downloading automatically. No environment variables or secrets required for basic functionality. Cold start takes approximately 30 seconds for model loading then subsequent requests are instant.
-
 ## Technical Architecture
 
 ```
@@ -124,7 +116,12 @@ sentiscope/
 
 ## Model Information
 
-DistilBERT base uncased fine-tuned on SST-2 (Stanford Sentiment Treebank) provides the sentiment classification engine. The model achieves 91.3% accuracy on SST-2 test set matching full BERT performance. Parameters total 66 million enabling fast inference while maintaining quality. Training data includes movie reviews labeled for binary sentiment classification. The model handles general domain text beyond movies through transfer learning.
+Twitter-RoBERTa base model fine-tuned on TweetEval sentiment analysis benchmark provides the sentiment classification engine. The model achieves state-of-the-art performance on social media text with three-class output: positive, neutral, and negative. Parameters total 125 million enabling robust inference while maintaining quality. Training data includes 58 million tweets ensuring excellent performance on informal text, hashtags, mentions, and emojis. The model handles general domain text beyond social media through transfer learning from massive pre-training corpora.
+
+## Contact
+
+Built by: Qazi Fabia Hoq
+LinkedIn: https://www.linkedin.com/in/qazifabiahoq/
 
 ## License
 
@@ -134,4 +131,4 @@ MIT License - This project is part of my portfolio and showcases my development 
 
 SentiScope - See Sentiment Clearly
 
-A demonstration of Deep Learning NLP, data visualization, and production-grade development.
+A demonstration of Deep Learning NLP with Twitter-RoBERTa, data visualization, and production-grade development.
