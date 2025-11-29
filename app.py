@@ -133,6 +133,21 @@ st.markdown("""
         transform: translateY(-2px) !important;
     }
     
+    /* Download button specific styling */
+    .stDownloadButton > button {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%) !important;
+        color: white !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        padding: 12px 32px !important;
+        border: none !important;
+        font-size: 16px !important;
+    }
+    
+    .stDownloadButton > button:hover {
+        background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%) !important;
+    }
+    
     [data-testid="stMetricValue"] {
         font-size: 32px !important;
         font-weight: 700 !important;
@@ -190,8 +205,8 @@ st.markdown("""
 # Initialize sentiment analyzer
 @st.cache_resource
 def load_model():
-    """Load the sentiment analysis model"""
-    return pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+    """Load the sentiment analysis model with 3 classes (positive, neutral, negative)"""
+    return pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest")
 
 # Initialize session state
 if 'journal_entries' not in st.session_state:
@@ -291,17 +306,24 @@ if mode == "Personal Journal":
                 sentiment = result['label']
                 confidence = result['score'] * 100
                 
-                if sentiment == 'POSITIVE':
+                if sentiment == 'positive':
                     st.markdown(f"""
                     <div class="sentiment-positive">
                         <h3 style="margin: 0; color: white;">😊 Positive Sentiment</h3>
                         <p style="margin: 8px 0 0 0; font-size: 18px;">Confidence: {confidence:.1f}%</p>
                     </div>
                     """, unsafe_allow_html=True)
-                else:
+                elif sentiment == 'negative':
                     st.markdown(f"""
                     <div class="sentiment-negative">
                         <h3 style="margin: 0; color: white;">😔 Negative Sentiment</h3>
+                        <p style="margin: 8px 0 0 0; font-size: 18px;">Confidence: {confidence:.1f}%</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:  # neutral
+                    st.markdown(f"""
+                    <div class="sentiment-neutral">
+                        <h3 style="margin: 0; color: white;">😐 Neutral Sentiment</h3>
                         <p style="margin: 8px 0 0 0; font-size: 18px;">Confidence: {confidence:.1f}%</p>
                     </div>
                     """, unsafe_allow_html=True)
@@ -318,7 +340,7 @@ if mode == "Personal Journal":
         # Create dataframe
         df = pd.DataFrame(st.session_state.journal_entries)
         df['timestamp'] = pd.to_datetime(df['timestamp'])
-        df['sentiment_numeric'] = df['sentiment'].map({'POSITIVE': 1, 'NEGATIVE': -1})
+        df['sentiment_numeric'] = df['sentiment'].map({'positive': 1, 'neutral': 0, 'negative': -1})
         
         # Sentiment over time chart
         fig = px.line(
@@ -343,7 +365,7 @@ if mode == "Personal Journal":
                 names=sentiment_counts.index,
                 title='Overall Sentiment Distribution',
                 color=sentiment_counts.index,
-                color_discrete_map={'POSITIVE': '#10b981', 'NEGATIVE': '#ef4444'}
+                color_discrete_map={'positive': '#10b981', 'neutral': '#f59e0b', 'negative': '#ef4444'}
             )
             st.plotly_chart(fig_pie, use_container_width=True)
         
@@ -355,7 +377,7 @@ if mode == "Personal Journal":
                 title='Average Confidence by Sentiment',
                 labels={'x': 'Sentiment', 'y': 'Confidence (%)'},
                 color=avg_confidence.index,
-                color_discrete_map={'POSITIVE': '#10b981', 'NEGATIVE': '#ef4444'}
+                color_discrete_map={'positive': '#10b981', 'neutral': '#f59e0b', 'negative': '#ef4444'}
             )
             st.plotly_chart(fig_bar, use_container_width=True)
         
@@ -446,17 +468,19 @@ else:  # Batch Analyzer mode
         st.markdown("### Analysis Results")
         
         # Summary metrics
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4, col5 = st.columns(5)
         
         total = len(df_results)
-        positive = len(df_results[df_results['sentiment'] == 'POSITIVE'])
-        negative = len(df_results[df_results['sentiment'] == 'NEGATIVE'])
+        positive = len(df_results[df_results['sentiment'] == 'positive'])
+        neutral = len(df_results[df_results['sentiment'] == 'neutral'])
+        negative = len(df_results[df_results['sentiment'] == 'negative'])
         avg_conf = df_results['confidence_pct'].mean()
         
         col1.metric("Total Analyzed", total)
         col2.metric("Positive", positive, f"{positive/total*100:.1f}%")
-        col3.metric("Negative", negative, f"{negative/total*100:.1f}%")
-        col4.metric("Avg Confidence", f"{avg_conf:.1f}%")
+        col3.metric("Neutral", neutral, f"{neutral/total*100:.1f}%")
+        col4.metric("Negative", negative, f"{negative/total*100:.1f}%")
+        col5.metric("Avg Confidence", f"{avg_conf:.1f}%")
         
         # Visualizations
         col1, col2 = st.columns(2)
@@ -468,7 +492,7 @@ else:  # Batch Analyzer mode
                 names=sentiment_counts.index,
                 title='Sentiment Distribution',
                 color=sentiment_counts.index,
-                color_discrete_map={'POSITIVE': '#10b981', 'NEGATIVE': '#ef4444'}
+                color_discrete_map={'positive': '#10b981', 'neutral': '#f59e0b', 'negative': '#ef4444'}
             )
             st.plotly_chart(fig_pie, use_container_width=True)
         
@@ -479,7 +503,7 @@ else:  # Batch Analyzer mode
                 y='confidence_pct',
                 title='Confidence Distribution by Sentiment',
                 color='sentiment',
-                color_discrete_map={'POSITIVE': '#10b981', 'NEGATIVE': '#ef4444'}
+                color_discrete_map={'positive': '#10b981', 'neutral': '#f59e0b', 'negative': '#ef4444'}
             )
             st.plotly_chart(fig_box, use_container_width=True)
         
@@ -489,8 +513,8 @@ else:  # Batch Analyzer mode
         # Filter options
         filter_sentiment = st.multiselect(
             "Filter by sentiment:",
-            options=['POSITIVE', 'NEGATIVE'],
-            default=['POSITIVE', 'NEGATIVE']
+            options=['positive', 'neutral', 'negative'],
+            default=['positive', 'neutral', 'negative']
         )
         
         df_filtered = df_results[df_results['sentiment'].isin(filter_sentiment)]
