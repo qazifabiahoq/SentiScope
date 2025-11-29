@@ -126,6 +126,38 @@ st.markdown("""
         color: #64748b !important;
         font-weight: 500 !important;
     }
+    
+    /* Sidebar Styling - Light text on dark background */
+    [data-testid="stSidebar"] {
+        background-color: #1e293b !important;
+    }
+    
+    [data-testid="stSidebar"] * {
+        color: #f8fafc !important;
+    }
+    
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3 {
+        color: #ffffff !important;
+    }
+    
+    [data-testid="stSidebar"] .stMarkdown {
+        color: #e2e8f0 !important;
+    }
+    
+    [data-testid="stSidebar"] hr {
+        border-color: #475569 !important;
+    }
+    
+    /* Sidebar radio buttons */
+    [data-testid="stSidebar"] label {
+        color: #f8fafc !important;
+    }
+    
+    [data-testid="stSidebar"] [role="radiogroup"] label {
+        color: #f8fafc !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
