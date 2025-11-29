@@ -387,14 +387,31 @@ if mode == "Personal Journal":
             with st.expander(f"{entry['timestamp'][:10]} - {entry['sentiment']} ({entry['confidence']*100:.1f}%)"):
                 st.write(entry['text'])
         
-        # Export option
-        if st.button("Export Journal as JSON"):
+        # Export options
+        st.markdown("### Export Journal")
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # JSON export
             json_data = json.dumps(st.session_state.journal_entries, indent=2)
             st.download_button(
-                label="Download Journal",
+                label="📥 Download as JSON",
                 data=json_data,
                 file_name=f"sentiscope_journal_{datetime.now().strftime('%Y%m%d')}.json",
-                mime="application/json"
+                mime="application/json",
+                use_container_width=True
+            )
+        
+        with col2:
+            # CSV export
+            df_export = pd.DataFrame(st.session_state.journal_entries)
+            csv_data = df_export.to_csv(index=False)
+            st.download_button(
+                label="📥 Download as CSV",
+                data=csv_data,
+                file_name=f"sentiscope_journal_{datetime.now().strftime('%Y%m%d')}.csv",
+                mime="text/csv",
+                use_container_width=True
             )
 
 # ============================================================================
