@@ -24,18 +24,36 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
+    /* FORCE LIGHT MODE - Override Streamlit dark theme */
     .main {
-        background-color: #ffffff;
+        background-color: #ffffff !important;
     }
     
+    .stApp {
+        background-color: #ffffff !important;
+    }
+    
+    /* All text must be dark */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Inter', sans-serif;
-        color: #1e293b;
+        color: #1e293b !important;
     }
     
     p, div, span, label {
         font-family: 'Inter', sans-serif;
-        color: #1e293b;
+        color: #1e293b !important;
+    }
+    
+    .main * {
+        color: #1e293b !important;
+    }
+    
+    .main h1, .main h2, .main h3 {
+        color: #1e293b !important;
+    }
+    
+    .main p, .main div {
+        color: #1e293b !important;
     }
     
     .sentiscope-header {
