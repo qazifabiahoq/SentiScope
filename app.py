@@ -228,7 +228,7 @@ with st.sidebar:
     
     st.markdown("### About SentiScope")
     st.markdown("""
-    SentiScope uses state-of-the-art Deep Learning (DistilBERT) to analyze sentiment in text.
+    SentiScope uses state-of-the-art Deep Learning (Twitter-RoBERTa) to analyze sentiment in text with three classes: positive, neutral, and negative.
     
     **Personal Journal:**
     - Track your mood over time
@@ -247,7 +247,7 @@ with st.sidebar:
     st.markdown("### Powered By")
     st.markdown("""
     - Hugging Face Transformers
-    - DistilBERT Model
+    - Twitter-RoBERTa Model
     - Streamlit
     - Plotly Visualizations
     """)
@@ -563,7 +563,7 @@ st.markdown("""
         <strong>SentiScope</strong> • Built with Streamlit & Hugging Face Transformers
     </p>
     <p style="margin: 4px 0 0 0;">
-        Deep Learning sentiment analysis powered by DistilBERT
+        Deep Learning sentiment analysis powered by Twitter-RoBERTa
     </p>
 </div>
 """, unsafe_allow_html=True)
