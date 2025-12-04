@@ -4,6 +4,7 @@ AI-Powered Sentiment Analysis Tool
 Track emotions and analyze feedback with AI - a sophisticated dual-mode sentiment analysis application built with state-of-the-art Deep Learning models.
 
 SentiScope provides both personal sentiment journaling and bulk text analysis capabilities, perfect for individuals tracking their emotional wellness and businesses analyzing customer feedback.
+
 Try it here: https://sentiscopeapp.streamlit.app/
 
 ## Project Overview
